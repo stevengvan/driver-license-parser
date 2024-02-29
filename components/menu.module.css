@@ -1,0 +1,56 @@
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  --menu-color: rgba(0, 0, 0, 0.45);
+  --menu-shadow: 0 0 6px var(--menu-color);
+}
+.menu-option {
+  color: var(--menu-color);
+  -moz-box-shadow: var(--menu-shadow);
+  -webkit-box-shadow: var(--menu-shadow);
+  box-shadow: var(--menu-shadow);
+  border: 1px solid var(--menu-color);
+  border-radius: 1rem;
+  padding: 0.5rem;
+  font-size: 25px;
+  width: 200px;
+  height: 200px;
+  background-color: transparent;
+  box-sizing: border-box;
+  word-break: break-word;
+}
+
+.menu-text {
+  font-size: 20px;
+  word-break: break-word;
+}
+.menu-note {
+  font-size: 15px;
+  word-break: break-word;
+}
+
+/* Enable hover only on non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+  .menu-option:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.25);
+    transition-duration: 250ms;
+  }
+}
+
+@media (orientation: landscape) {
+  .menu-container {
+    flex-direction: row;
+  }
+  .menu-option:not(:last-of-type) {
+    margin-right: 0.75rem;
+  }
+}
+
+@media (orientation: portrait) {
+  .menu-option:not(:last-of-type) {
+    margin-bottom: 0.75rem;
+  }
+}
