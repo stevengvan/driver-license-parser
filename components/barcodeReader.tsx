@@ -16,14 +16,16 @@ const labels: { [k: string]: any } = {
   DAI: "city",
   DAJ: "state",
   DAK: "zipcode",
-  DCA: "class",
-  DCB: "endorsement",
-  DCD: "restriction",
-  DBB: "dob",
-  DAW: "weight",
-  DAY: "eyes",
   DBD: "issuance",
   DBA: "expiration",
+  ZOZOA: "first",
+  DCA: "class",
+  DCD: "endorsement",
+  DCB: "restriction",
+  DBB: "dob",
+  DAU: "height",
+  DAW: "weight",
+  DAY: "eyes",
   DCF: "dd",
   DCK: "dd",
   DCG: "country",
@@ -38,14 +40,16 @@ var licenseInfo: { [k: string]: any } = {
   city: "",
   state: "",
   zipcode: "",
+  issuance: "",
+  expiration: "",
+  first: "",
   class: "",
   restriction: "",
   endorsement: "",
   dob: "",
+  height: "",
   weight: "",
   eyes: "",
-  issuance: "",
-  expiration: "",
   dd: "",
   country: "",
 };
@@ -95,6 +99,7 @@ export default function Scanner() {
       );
 
       var formInput: HTMLInputElement;
+      // combine first, middle, and last name into one string
       if (label === "DAC" || label === "DAD" || label === "DCS") {
         formInput = document.getElementsByName(
           "fullName"
@@ -104,7 +109,9 @@ export default function Scanner() {
           fullName += " ";
         }
         formInput.value = fullName;
-      } else if (label === "DAI" || label === "DAJ" || label === "DAK") {
+      }
+      // combine city, state, and zipcode into one string
+      else if (label === "DAI" || label === "DAJ" || label === "DAK") {
         formInput = document.getElementsByName(
           "location"
         )[0] as HTMLInputElement;
@@ -115,39 +122,44 @@ export default function Scanner() {
           location += " ";
         }
         formInput.value = location;
-      } else if (label === "DBB" || label === "DBD" || label === "DBA") {
-        switch (label) {
-          case "DBB":
-            formInput = document.getElementsByName(
-              "dob"
-            )[0] as HTMLInputElement;
-            break;
-          case "DBD":
-            formInput = document.getElementsByName(
-              "issuance"
-            )[0] as HTMLInputElement;
-            break;
-          case "DBA":
-            formInput = document.getElementsByName(
-              "expiration"
-            )[0] as HTMLInputElement;
-            break;
-        }
+      }
+      // format dates
+      else if (
+        label === "DBB" ||
+        label === "DBD" ||
+        label === "DBA" ||
+        label === "ZOZOA"
+      ) {
         let date: string = licenseInfo[labels[label]];
-        formInput.value =
+
+        formInput = document.getElementsByName(
+          labels[label]
+        )[0] as HTMLInputElement;
+
+        formInput.value = String(
           date.substring(0, 2) +
-          "/" +
-          date.substring(2, 4) +
-          "/" +
-          date.substring(4);
+            "/" +
+            date.substring(2, 4) +
+            "/" +
+            date.substring(4)
+        );
+      }
+      // convert height from inches to feets and inches
+      else if (label === "DAU") {
+        let totalHeight = Number(licenseInfo[labels[label]].substring(0, 3));
+        let feets = Math.floor(totalHeight / 12);
+        let inches = totalHeight - feets * 12;
+
+        formInput = document.getElementsByName("height")[0] as HTMLInputElement;
+        formInput.value = `${feets}'-${
+          inches > 9 ? inches : "0" + String(inches)
+        }"`;
       } else {
         formInput = document.getElementsByName(
           labels[label]
         )[0] as HTMLInputElement;
 
-        if (formInput) {
-          formInput.value = licenseInfo[labels[label]];
-        }
+        if (formInput) formInput.value = licenseInfo[labels[label]];
       }
     }
 

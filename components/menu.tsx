@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 import styles from "./menu.module.css";
 import { CiVideoOn } from "react-icons/ci";
@@ -51,6 +52,11 @@ export default function Menu({ changeOption }: optionsProps) {
             barcode located on your driver's license
           </span>
         </p>
+        <img
+          alt=""
+          src="/license-sample.webp"
+          className={styles["license-sample"]}
+        />
         <br></br>
         <p className={styles["menu-note"]}>
           <span style={{ color: "red", fontWeight: "bold" }}>Note:</span> Using

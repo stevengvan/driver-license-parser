@@ -41,6 +41,11 @@
 }
 
 @media (orientation: landscape) {
+  .license-sample {
+    width: 35vw;
+    height: auto;
+  }
+
   .menu-container {
     flex-direction: row;
   }
@@ -50,7 +55,18 @@
 }
 
 @media (orientation: portrait) {
+  .license-sample {
+    width: 100vw;
+    height: auto;
+  }
+
   .menu-option:not(:last-of-type) {
     margin-bottom: 0.75rem;
+  }
+}
+
+@media (min-width: 431px) {
+  .license-sample {
+    width: 430px;
   }
 }
