@@ -88,8 +88,11 @@ export default function Scanner() {
   // displays info in easier format
   function parseInfo(text: string) {
     const values = text.split(/[\r\n]+/);
+    const textForm = document.getElementById("textForm") as HTMLTextAreaElement;
+    textForm.textContent = "";
     let fullName = "";
     let location = "";
+
     for (let label in labels) {
       var info: string = values.find((element) =>
         element.includes(label)
@@ -97,13 +100,15 @@ export default function Scanner() {
       licenseInfo[labels[label]] = info.slice(
         info.indexOf(label) + label.length
       );
-
       var formInput: HTMLInputElement;
+      var textInfo = "";
+
       // combine first, middle, and last name into one string
       if (label === "DAC" || label === "DAD" || label === "DCS") {
         formInput = document.getElementsByName(
           "fullName"
         )[0] as HTMLInputElement;
+
         fullName += licenseInfo[labels[label]];
         if (label !== "DCS") {
           fullName += " ";
@@ -143,6 +148,7 @@ export default function Scanner() {
             "/" +
             date.substring(4)
         );
+        textInfo = `${labels[label]}: ${formInput.value}\n`;
       }
       // convert height from inches to feets and inches
       else if (label === "DAU") {
@@ -154,13 +160,24 @@ export default function Scanner() {
         formInput.value = `${feets}'-${
           inches > 9 ? inches : "0" + String(inches)
         }"`;
+        textInfo = `${labels[label]}: ${formInput.value}\n`;
+      }
+      // add unit of measure to weight
+      else if (label === "DAW") {
+        formInput = document.getElementsByName("weight")[0] as HTMLInputElement;
+        formInput.value = licenseInfo[labels[label]] + " lb";
+        textInfo = `${labels[label]}: ${formInput.value}\n`;
       } else {
         formInput = document.getElementsByName(
           labels[label]
         )[0] as HTMLInputElement;
 
-        if (formInput) formInput.value = licenseInfo[labels[label]];
+        formInput.value = licenseInfo[labels[label]];
       }
+
+      if (textInfo.length === 0)
+        textInfo = `${labels[label]}: ${licenseInfo[labels[label]]}\n`;
+      textForm.textContent += textInfo;
     }
 
     return licenseInfo;

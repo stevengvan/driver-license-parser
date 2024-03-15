@@ -1,22 +1,36 @@
 import { useState } from "react";
+import styles from "./info.module.css";
 
 export default function Info() {
   const [showMore, setShowMore] = useState<boolean>(false);
+  const [textMode, setTextMode] = useState<boolean>(false);
   function clearInfo() {
     const license = document.getElementById("parsedLicense") as HTMLFormElement;
     license.reset();
+    const textForm = document.getElementById("textForm") as HTMLTextAreaElement;
+    textForm.textContent = "";
   }
   return (
     <>
       <button className="actionButton" onClick={clearInfo}>
         Clear License
       </button>
-      <button className="actionButton" onClick={() => setShowMore(!showMore)}>
+      <button className="actionButton" onClick={() => setTextMode(!textMode)}>
+        {textMode ? "Form Mode" : "Text Mode"}
+      </button>
+      <button
+        className="actionButton"
+        onClick={() => setShowMore(!showMore)}
+        style={!textMode ? { display: "block" } : { display: "none" }}
+      >
         {showMore ? "Show Less" : "Show More"}
       </button>
       <br></br>
 
-      <form id="parsedLicense">
+      <form
+        id="parsedLicense"
+        style={!textMode ? { display: "block" } : { display: "none" }}
+      >
         <label htmlFor="licenseNo">License No.: </label>
         <input type="text" name="licenseNo"></input>
         <br></br>
@@ -83,6 +97,12 @@ export default function Info() {
           <br></br>
         </div>
       </form>
+
+      <textarea
+        id="textForm"
+        className={styles.textForm}
+        style={textMode ? { display: "block" } : { display: "none" }}
+      ></textarea>
     </>
   );
 }
